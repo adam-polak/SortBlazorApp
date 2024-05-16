@@ -28,3 +28,4 @@
 /Users/adampolak/git/SortBlazorApp/obj/Debug/net8.0/SortBlazorApp.pdb
 /Users/adampolak/git/SortBlazorApp/obj/Debug/net8.0/SortBlazorApp.genruntimeconfig.cache
 /Users/adampolak/git/SortBlazorApp/obj/Debug/net8.0/ref/SortBlazorApp.dll
+/Users/adampolak/git/SortBlazorApp/obj/Debug/net8.0/SortBlazorApp.sourcelink.json

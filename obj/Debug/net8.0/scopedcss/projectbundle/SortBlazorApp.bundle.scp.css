@@ -228,6 +228,7 @@ button:active[b-w39l8ouqk4] {
     background-color: purple;
     margin-left: 0.5vw;
     margin-right: 0.5vw;
+    transition: 200ms;
 }
 
 .container[b-w39l8ouqk4] {

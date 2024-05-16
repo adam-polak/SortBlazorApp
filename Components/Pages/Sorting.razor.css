@@ -24,6 +24,7 @@ button:active {
     background-color: purple;
     margin-left: 0.5vw;
     margin-right: 0.5vw;
+    transition: 200ms;
 }
 
 .container {
