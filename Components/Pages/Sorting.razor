@@ -5,8 +5,8 @@
 <PageTitle>Sorting</PageTitle>
 
 <div class="container">
-    @foreach (int i in bars) {
-        int top = amount - i;
+    @foreach (double i in bars) {
+        double top = 50.0 - i;
         string marginTop = "" + top + "vh";
         string height = "" + i + "vh";
         <div class="bar" style="margin-top:@marginTop;height:@height;"></div>
@@ -19,15 +19,15 @@
 
 @code {
     int num = 0;
-    private static int amount = 50;
-    int[] bars = new int[amount];
+    private static int amount = 400;
+    double[] bars = new double[amount];
     
     private void MakeList() {
         num = 0;
-        bars = new int[amount];
+        bars = new double[amount];
         Random rnd = new Random();
         for(int i = 0; i < amount; i++) {
-            bars[i] = rnd.Next(1, 50);
+            bars[i] = rnd.NextDouble() * 49;
         }
     }
 
@@ -38,30 +38,32 @@
         }
         if(bars[amount - 1] == 0) return;
         
-        InsertionSort(num++);
-        Thread.Sleep(100);
+        bool render = InsertionSort(num++);
+        if(render) {
+            await InvokeAsync(StateHasChanged);
+            await Task.Yield();
+        }
+        Thread.Sleep(50);
         Console.Write("|");
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
         SortBars();
     }
 
-    private int InsertionSort(int index) {
+    private bool InsertionSort(int index) {
         int b = 0;
         while(b < index) {
             if(bars[index] < bars[b]) {
                 int s = index;
-                int temp = bars[index];
+                double temp = bars[index];
                 while(s > b) {
                     bars[s] = bars[s - 1];
                     s--;
                 }
                 bars[b] = temp;
-                break;
+                return true;
             }
             b++;
         }
 
-    return b;
+        return false;
     }
 }

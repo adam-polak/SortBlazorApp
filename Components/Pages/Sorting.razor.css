@@ -22,13 +22,12 @@ button:active {
 .bar {
     width: 1vw;
     background-color: purple;
-    margin-left: 0.5vw;
-    margin-right: 0.5vw;
-    transition: 200ms;
 }
 
 .container {
     display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
     height: 50vh;
     width: 70vw;
     background-color: lightpink;

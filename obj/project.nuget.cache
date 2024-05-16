@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2yhhzwdNFPjhkbEgeELD5RCPPHg0OVdcgv/i28Y5H2x1DhMp4obN8vDqDb8/rHDZQyAPOcEbW9z4FUqdgS83oA==",
+  "dgSpecHash": "5Re5w6NM5gP1y/pTp2zUTX/LFoThYjpxyiZNXqZ7Tr93aTGgQJuB74em4zSDp59Zu5qSa9KH8RYKE+Ff7lQLvg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adamp\\git\\SortBlazorApp\\SortBlazorApp.csproj",
+  "projectFilePath": "/Users/adampolak/git/SortBlazorApp/SortBlazorApp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
