@@ -3,7 +3,7 @@
 @inject IJSRuntime JS
 
 <PageTitle>Sorting</PageTitle>
-
+<div class="btnContainer"><button @onclick="MakeList">Randomize</button></div>
 <div class="container">
     @foreach (double i in bars) {
         double top = 50.0 - i;
@@ -17,35 +17,36 @@
     <button>Merge Sort</button>
     <button>Bubble Sort</button>
 </div>
-<button @onclick="MakeList">Randomize</button>
-@* <div class="btnContainer">
-    <button @onclick="MakeList">New List</button>
-    <button @onclick="SortBars">Sort</button>
-</div> *@
 
 @code {
+
     int num = 0;
     private static int amount = 400;
     double[] bars = new double[amount];
+    bool firstTime = true;
     
-    private void MakeList() {
+    private async void MakeList() {
+        firstTime = false;
         num = 0;
         bars = new double[amount];
         Random rnd = new Random();
         for(int i = 0; i < amount; i++) {
             bars[i] = rnd.NextDouble() * 49;
         }
+        await InvokeAsync(StateHasChanged);
+        await Task.Yield();
     }
 
     private async void SortBars() {
         if(num == amount) return;
+        if(firstTime) MakeList();
         
         bool render = InsertionSort(num++);
         if(render) {
             await InvokeAsync(StateHasChanged);
             await Task.Yield();
         }
-        Thread.Sleep(50);
+        Thread.Sleep(20);
         SortBars();
     }
 
