@@ -13,7 +13,7 @@
     }
 </div>
 <div class="btnContainer">
-    <button @onclick="SortBars">Insertion Sort</button>
+    <button @onclick="InsertionSortBars">Insertion Sort</button>
     <button>Merge Sort</button>
     <button>Bubble Sort</button>
 </div>
@@ -26,8 +26,14 @@
 
     protected override async Task OnInitializedAsync() {
         MakeList();
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
+        await ForceRender(true);
+    }
+
+    private async Task ForceRender(bool value) {
+        if(value) {
+            await InvokeAsync(StateHasChanged);
+            await Task.Yield();
+        }
     }
     
     private void MakeList() {
@@ -39,16 +45,20 @@
         }
     }
 
-    private async void SortBars() {
+    private async void MergeSortBars() {
+        if(num == amount) return;
+
+        bool render = true;
+        await ForceRender(render);
+    }
+
+    private async void InsertionSortBars() {
         if(num == amount) return;
         
         bool render = InsertionSort(num++);
-        if(render) {
-            await InvokeAsync(StateHasChanged);
-            await Task.Yield();
-        }
+        await ForceRender(render);
         Thread.Sleep(20);
-        SortBars();
+        InsertionSortBars();
     }
 
     private bool InsertionSort(int index) {
