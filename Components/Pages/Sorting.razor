@@ -13,9 +13,15 @@
     }
 </div>
 <div class="btnContainer">
+    <button @onclick="SortBars">Insertion Sort</button>
+    <button>Merge Sort</button>
+    <button>Bubble Sort</button>
+</div>
+<button @onclick="MakeList">Randomize</button>
+@* <div class="btnContainer">
     <button @onclick="MakeList">New List</button>
     <button @onclick="SortBars">Sort</button>
-</div>
+</div> *@
 
 @code {
     int num = 0;
@@ -32,11 +38,7 @@
     }
 
     private async void SortBars() {
-        if(num == amount) {
-            Console.WriteLine("\nDONE");
-            return;
-        }
-        if(bars[amount - 1] == 0) return;
+        if(num == amount) return;
         
         bool render = InsertionSort(num++);
         if(render) {
@@ -44,7 +46,6 @@
             await Task.Yield();
         }
         Thread.Sleep(50);
-        Console.Write("|");
         SortBars();
     }
 
