@@ -23,23 +23,24 @@
     int num = 0;
     private static int amount = 400;
     double[] bars = new double[amount];
-    bool firstTime = true;
+
+    protected override async Task OnInitializedAsync() {
+        MakeList();
+        await InvokeAsync(StateHasChanged);
+        await Task.Yield();
+    }
     
-    private async void MakeList() {
-        firstTime = false;
+    private void MakeList() {
         num = 0;
         bars = new double[amount];
         Random rnd = new Random();
         for(int i = 0; i < amount; i++) {
             bars[i] = rnd.NextDouble() * 49;
         }
-        await InvokeAsync(StateHasChanged);
-        await Task.Yield();
     }
 
     private async void SortBars() {
         if(num == amount) return;
-        if(firstTime) MakeList();
         
         bool render = InsertionSort(num++);
         if(render) {
