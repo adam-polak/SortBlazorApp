@@ -45,22 +45,22 @@
         }
     }
 
-    private void MergeSortBars() {
-        if(num == amount) return;
-        BreakUpArr(0, amount / 2, amount);
+    private async void MergeSortBars() {
+        double[] tmpBars = new double[amount];
+        Array.Copy(bars, tmpBars, amount);
+        await BreakUpArray(tmpBars, 0, amount / 2, amount);
     }
 
-    private void BreakUpArr(int start, int middle, int end) {
-        if(middle == end) return;
+    private async Task BreakUpArray(double[] tmpBars, int start, int middle, int end) {
+        if(middle < start || end - start < 1) return;
         int m1 = (middle - start) / 2;
         int m2 = (end - middle) / 2;
-        MergeSort(start, m1, middle);
-        MergeSort(middle, m2, end);
-        MergeSort(start, middle, end);
+        await BreakUpArray(tmpBars, start, m1, middle);
+        await BreakUpArray(tmpBars, middle + 1, m2, end);
+        await MergeSort(tmpBars, start, middle, end);
     }
 
-    private async void MergeSort(int start1, int start2, int end3) {
-        double[] ans = new double[amount];
+    private async Task MergeSort(double[] tmpBars, int start1, int start2, int end3) {
         int start = start1;
         int outIndex = start1;
         int end1 = start2;
@@ -71,34 +71,34 @@
             lowest = -1;
             if(start1 < end1) {
                 if(start2 < end2) {
-                    if(bars[start1] <= bars[start2]) lowest = start1;
+                    if(tmpBars[start1] <= tmpBars[start2]) lowest = start1;
                     else lowest = start2;
                     if(start3 == end3 && lowest == start2) start2++;
                 }
                 if(start3 < end3) {
                     if(lowest != -1) {
-                        bool larger = bars[lowest] > bars[start3];
+                        bool larger = tmpBars[lowest] > tmpBars[start3];
                         if(!larger && lowest == start2) start2++;
                         else if(larger) lowest = start3++;
                     } else {
-                        if(bars[start1] <= bars[start3]) lowest = start1;
+                        if(tmpBars[start1] <= tmpBars[start3]) lowest = start1;
                         else lowest = start3++;
                     }
                 }
                 if(lowest == -1 || lowest == start1) lowest = start1++;
             } else if(start2 < end2) {
                 if(start3 < end3) {
-                    if(bars[start2] <= bars[start3]) lowest = start2;
+                    if(tmpBars[start2] <= tmpBars[start3]) lowest = start2;
                     else lowest = start3++;
                 } else lowest = start2;
                 if(lowest == start2) lowest = start2++;
             } else lowest = start3++;
 
-            ans[outIndex++] = bars[lowest];
+            bars[outIndex++] = tmpBars[lowest];
+            Thread.Sleep(20);
+            await ForceRender(true);
         }
-        for(int i = start; i < end3; i++) bars[i] = ans[i];
-        Thread.Sleep(20);
-        await ForceRender(true);
+        for(int i = start; i < end3; i++) tmpBars[i] = bars[i];
     }
 
     private async void InsertionSortBars() {
