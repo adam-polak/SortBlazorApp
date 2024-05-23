@@ -14,7 +14,7 @@
 </div>
 <div class="btnContainer">
     <button @onclick="InsertionSortBars">Insertion Sort</button>
-    <button>Merge Sort</button>
+    <button @onclick="MergeSortBars">Merge Sort</button>
     <button>Bubble Sort</button>
 </div>
 
@@ -47,9 +47,52 @@
 
     private async void MergeSortBars() {
         if(num == amount) return;
+        await ForceRender(true);
+    }
 
-        bool render = true;
-        await ForceRender(render);
+    private void BreakUpArr(int start, int end) {
+        if(start == end) return;
+        int middle = (end - start) / 2;
+
+    }
+
+    private double[] MergeSort(double[] arr, int start1, int start2, int end3) {
+        double[] ans = new double[amount];
+        int outIndex = start1;
+        int end1 = start2;
+        int end2 = start2 + 1;
+        int start3 = end2;
+        int lowest = -1;
+        while(outIndex < end3) {
+            if(start1 < end1) {
+                if(start2 < end2) {
+                    if(arr[start1] <= arr[start2]) lowest = start1;
+                    else lowest = start2;
+                    if(start3 == end3 && lowest == start2) start2++;
+                }
+                if(start3 < end3) {
+                    if(lowest != -1) {
+                        bool larger = arr[lowest] > arr[start3];
+                        if(!larger && lowest == start2) start2++;
+                        else if(larger) lowest = start3++;
+                    } else {
+                        if(arr[start1] <= arr[start3]) lowest = start1;
+                        else lowest = start3++;
+                    }
+                }
+                if(lowest == -1 || lowest == start1) lowest = start1++;
+            } else if(start2 < end2) {
+                if(start3 < end3) {
+                    if(arr[start2] <= arr[start3]) lowest = start2;
+                    else lowest = start3++;
+                } else lowest = start2;
+                if(lowest == start2) lowest = start2++;
+            } else lowest = start3++;
+
+            ans[outIndex++] = arr[lowest];
+        }
+
+        return ans;
     }
 
     private async void InsertionSortBars() {
