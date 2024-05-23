@@ -68,6 +68,7 @@
         int start3 = end2;
         int lowest = -1;
         while(outIndex < end3) {
+            lowest = -1;
             if(start1 < end1) {
                 if(start2 < end2) {
                     if(bars[start1] <= bars[start2]) lowest = start1;
