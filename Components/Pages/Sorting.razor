@@ -46,15 +46,38 @@
     }
 
     private async void MergeSortBars() {
-        double[] tmpBars = new double[amount];
-        Array.Copy(bars, tmpBars, amount);
-        await BreakUpArray(tmpBars, 0, amount / 2, amount);
+        for(int i = 0; i < 1000; i++) {
+            double[] tmpBars = new double[amount];
+            Array.Copy(bars, tmpBars, amount);
+            await BreakUpArray(tmpBars, 0, amount / 2, amount);
+        }
+    }
+
+    private void SortSmall(double[] tmpBars, int start, int end) {
+        int index = start;
+        while(index < end) {
+            int b = start;
+            while(b < end) {
+                if(tmpBars[index] < tmpBars[b]) {
+                    int s = index;
+                    double temp = tmpBars[index];
+                    while(s > b) {
+                        tmpBars[s] = tmpBars[s - 1];
+                        s--;
+                    }
+                    tmpBars[b] = temp;
+                }
+                b++;
+            }
+            index++;
+        }
     }
 
     private async Task BreakUpArray(double[] tmpBars, int start, int middle, int end) {
-        if(middle < start || end - start < 1) return;
-        int m1 = (middle - start) / 2;
-        int m2 = (end - middle) / 2;
+        if(middle < start || middle == end) return;
+        if(end - start + 1 <= 3) SortSmall(tmpBars, start, end);
+        int m1 = (middle - start + 1) / 2;
+        int m2 = ((end - middle + 1) / 2) + middle;
         await BreakUpArray(tmpBars, start, m1, middle);
         await BreakUpArray(tmpBars, middle + 1, m2, end);
         await MergeSort(tmpBars, start, middle, end);
@@ -95,7 +118,7 @@
             } else lowest = start3++;
 
             bars[outIndex++] = tmpBars[lowest];
-            Thread.Sleep(20);
+            Thread.Sleep(1);
             await ForceRender(true);
         }
         for(int i = start; i < end3; i++) tmpBars[i] = bars[i];
