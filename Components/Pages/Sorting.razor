@@ -52,11 +52,10 @@
             swap = bars[i];
             bars[i] = bars[i + 1];
             bars[i + 1] = swap;
-            i = 0;
+            i = -1;
+            Thread.Sleep(20);
             await ForceRender(true);
         }
-        Console.WriteLine(bars[0]);
-        Console.WriteLine(bars[1]);
     }
 
     private async void MergeSortBars() {
