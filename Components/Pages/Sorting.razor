@@ -15,7 +15,7 @@
 <div class="btnContainer">
     <button @onclick="InsertionSortBars">Insertion Sort</button>
     <button @onclick="MergeSortBars">Merge Sort</button>
-    <button>Bubble Sort</button>
+    <button @onclick="BubbleSortBars">Bubble Sort</button>
 </div>
 
 @code {
@@ -43,6 +43,20 @@
         for(int i = 0; i < amount; i++) {
             bars[i] = rnd.NextDouble() * 49;
         }
+    }
+
+    private async void BubbleSortBars() {
+        double swap = 0;
+        for(int i = 0; i < amount - 1; i++) {
+            if(bars[i + 1] > bars[i]) continue;
+            swap = bars[i];
+            bars[i] = bars[i + 1];
+            bars[i + 1] = swap;
+            i = 0;
+            await ForceRender(true);
+        }
+        Console.WriteLine(bars[0]);
+        Console.WriteLine(bars[1]);
     }
 
     private async void MergeSortBars() {
