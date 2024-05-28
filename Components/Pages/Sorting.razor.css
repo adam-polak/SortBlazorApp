@@ -1,3 +1,12 @@
+#randomize {
+    background-color: lightpink;
+    color: purple;
+    border-radius: 10px;
+    font-size: xx-large;
+    font-weight: bold;
+    width: 20vw;
+}
+
 button {
     margin: auto;
     color: white;

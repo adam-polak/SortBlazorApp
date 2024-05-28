@@ -3,7 +3,9 @@
 @inject IJSRuntime JS
 
 <PageTitle>Sorting</PageTitle>
-<div class="btnContainer"><button @onclick="MakeList">Randomize</button></div>
+<div class="btnContainer">
+    <button id="randomize" @onclick="MakeList">Randomize</button>
+</div>
 <div class="container">
     @foreach (double i in bars) {
         double top = 50.0 - i;
