@@ -21,7 +21,9 @@ public class PostSortTime
 
     public void InsertTime(string algorithm, long nanoSeconds) {
         if(!ContainsAlgorithm(algorithm)) return;
-        var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, nanoseconds) VALUES (" + algorithm + ", " + nanoSeconds + ");", connection);
+        var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, time_nanoseconds) VALUES (@a, @n);", connection);
+        cmd.Parameters.AddWithValue("a", algorithm);
+        cmd.Parameters.AddWithValue("n", nanoSeconds);
         cmd.ExecuteNonQuery();
     }
 }
