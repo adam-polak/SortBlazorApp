@@ -52,6 +52,7 @@
     }
 
     private async void BubbleSortBars() {
+        if(IsBarsSorted()) return;
         double swap = 0;
         for(int i = 0; i < amount - 1; i++) {
             if(bars[i + 1] > bars[i]) continue;
@@ -59,10 +60,31 @@
             bars[i] = bars[i + 1];
             bars[i + 1] = swap;
             i = -1;
-            Thread.Sleep(20);
+            Thread.Sleep(1);
             await ForceRender(true);
         }
+        TimedBubbleSortBars();
     }
+
+    private void TimedBubbleSortBars() {
+        System.GC.Collect();
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        double swap = 0;
+        for(int i = 0; i < amount - 1; i++) {
+            if(timedBars[i + 1] > timedBars[i]) continue;
+            swap = timedBars[i];
+            timedBars[i] = timedBars[i + 1];
+            timedBars[i + 1] = swap;
+            i = -1;
+        }
+        watch.Stop();
+        long elapsedNs = watch.ElapsedTicks / 100;
+        connection = new SortTimeDatabase();
+        connection.InsertTime("Bubble Sort", elapsedNs);
+        Console.WriteLine("Bubble Sort took " + elapsedNs + " nanoseconds");
+    }
+
+    
 
     private async void MergeSortBars() {
         if(IsBarsSorted()) return;
