@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "5Re5w6NM5gP1y/pTp2zUTX/LFoThYjpxyiZNXqZ7Tr93aTGgQJuB74em4zSDp59Zu5qSa9KH8RYKE+Ff7lQLvg==",
+  "dgSpecHash": "290I6WBY2U1pelz/a/PNEPrUCNVbsh/DaEZyp+EUrjGf6Fhxjb2ZBjwfshmvbzcXT5SHA73trXMYWykdsUqjTw==",
   "success": true,
   "projectFilePath": "/Users/adampolak/git/SortBlazorApp/SortBlazorApp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/adampolak/.nuget/packages/dapper/2.1.35/dapper.2.1.35.nupkg.sha512",
+    "/Users/adampolak/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "/Users/adampolak/.nuget/packages/microsoft.extensions.logging.abstractions/8.0.0/microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
+    "/Users/adampolak/.nuget/packages/npgsql/8.0.3/npgsql.8.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
