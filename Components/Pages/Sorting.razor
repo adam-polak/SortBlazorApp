@@ -26,6 +26,9 @@
     private static int amount = 400;
     double[] bars = new double[amount];
     double[] timedBars = new double[amount];
+    PostSortTime? connection;
+    bool firstTimeInsertionSort = true;
+    bool firstTimeMergeSort = true;
 
     protected override async Task OnInitializedAsync() {
         MakeList();
@@ -76,7 +79,11 @@
         var watch = System.Diagnostics.Stopwatch.StartNew();
         TimedBreakUpArray(tmpBars, 0, amount / 2, amount);
         watch.Stop();
-        var elapsedNs = watch.ElapsedTicks / 100;
+        long elapsedNs = watch.ElapsedTicks / 100;
+        if(!firstTimeMergeSort) {
+            connection = new PostSortTime();
+            connection.InsertTime("Merge Sort", elapsedNs);
+        } else firstTimeMergeSort = false;
         Console.WriteLine("Merge Sort took " + elapsedNs + " nanoseconds");
     }
 
@@ -193,8 +200,10 @@
     }
 
     private async void InsertionSortBars() {
+        num = amount;
         if(num == amount) {
             TimedInsertionSortBars();
+            MakeList();
             return;
         }
         bool render = InsertionSort(0, num++);
@@ -210,7 +219,11 @@
         var watch = System.Diagnostics.Stopwatch.StartNew();
         while(index < amount) InsertionSort(timedBars, 0, index++);
         watch.Stop();
-        var elapsedNs = watch.ElapsedTicks / 100;
+        long elapsedNs = watch.ElapsedTicks / 100;
+        if(!firstTimeInsertionSort) {
+            connection = new PostSortTime();
+            connection.InsertTime("Insertion Sort", elapsedNs);
+        } else firstTimeInsertionSort = false;
         Console.WriteLine("Insertion sort took " + elapsedNs + " nanoseconds");
     }
 
