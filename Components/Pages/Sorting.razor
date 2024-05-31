@@ -71,6 +71,7 @@
 
     private void TimedMergeSortBars() {
         double[] tmpBars = new double[amount];
+        Array.Copy(timedBars, tmpBars, amount);
         System.GC.Collect();
         var watch = System.Diagnostics.Stopwatch.StartNew();
         TimedBreakUpArray(tmpBars, 0, amount / 2, amount);
@@ -79,32 +80,17 @@
         Console.WriteLine("Merge Sort took " + elapsedNs + " nanoseconds");
     }
 
-    private async void TimedBreakUpArray(double[] tmpBars, int start, int middle, int end) {
+    private void TimedBreakUpArray(double[] tmpBars, int start, int middle, int end) {
         if(middle < start || middle == end) return;
         if(end - start + 1 <= 5) SortSmall(start, end);
         int m1 = ((middle - start + 1) / 2) + start;
         int m2 = ((end - middle + 1) / 2) + middle;
         TimedBreakUpArray(tmpBars, start, m1, middle);
         TimedBreakUpArray(tmpBars, middle + 1, m2, end);
-        await MergeSort(timedBars, tmpBars, start, middle, end, true);
+        TimedMergeSort(timedBars, tmpBars, start, middle, end);
     }
 
-    private void SortSmall(int start, int end) {
-        int index = start;
-        while(index < end) InsertionSort(start, index++);
-    }
-
-    private async Task BreakUpArray(double[] tmpBars, int start, int middle, int end) {
-        if(middle < start || middle == end) return;
-        if(end - start + 1 <= 5) SortSmall(start, end);
-        int m1 = ((middle - start + 1) / 2) + start;
-        int m2 = ((end - middle + 1) / 2) + middle;
-        await BreakUpArray(tmpBars, start, m1, middle);
-        await BreakUpArray(tmpBars, middle + 1, m2, end);
-        await MergeSort(bars, tmpBars, start, middle, end, false);
-    }
-
-    private async Task MergeSort(double[] outArr, double[] tmpBars, int start1, int start2, int end3, bool timed) {
+    private void TimedMergeSort(double[] outArr, double[] tmpBars, int start1, int start2, int end3) {
         int start = start1;
         int outIndex = start1;
         int end1 = start2;
@@ -139,10 +125,62 @@
             } else lowest = start3++;
 
             outArr[outIndex++] = tmpBars[lowest];
-            if(!timed) {
-                Thread.Sleep(5);
-                await ForceRender(true);
-            }
+        }
+        for(int i = start; i < end3; i++) tmpBars[i] = outArr[i];
+    }
+
+    private void SortSmall(int start, int end) {
+        int index = start;
+        while(index < end) InsertionSort(start, index++);
+    }
+
+    private async Task BreakUpArray(double[] tmpBars, int start, int middle, int end) {
+        if(middle < start || middle == end) return;
+        if(end - start + 1 <= 5) SortSmall(start, end);
+        int m1 = ((middle - start + 1) / 2) + start;
+        int m2 = ((end - middle + 1) / 2) + middle;
+        await BreakUpArray(tmpBars, start, m1, middle);
+        await BreakUpArray(tmpBars, middle + 1, m2, end);
+        await MergeSort(bars, tmpBars, start, middle, end);
+    }
+
+    private async Task MergeSort(double[] outArr, double[] tmpBars, int start1, int start2, int end3) {
+        int start = start1;
+        int outIndex = start1;
+        int end1 = start2;
+        int end2 = start2 + 1;
+        int start3 = end2;
+        int lowest = -1;
+        while(outIndex < end3) {
+            lowest = -1;
+            if(start1 < end1) {
+                if(start2 < end2) {
+                    if(tmpBars[start1] <= tmpBars[start2]) lowest = start1;
+                    else lowest = start2;
+                    if(start3 == end3 && lowest == start2) start2++;
+                }
+                if(start3 < end3) {
+                    if(lowest != -1) {
+                        bool larger = tmpBars[lowest] > tmpBars[start3];
+                        if(!larger && lowest == start2) start2++;
+                        else if(larger) lowest = start3++;
+                    } else {
+                        if(tmpBars[start1] <= tmpBars[start3]) lowest = start1;
+                        else lowest = start3++;
+                    }
+                }
+                if(lowest == -1 || lowest == start1) lowest = start1++;
+            } else if(start2 < end2) {
+                if(start3 < end3) {
+                    if(tmpBars[start2] <= tmpBars[start3]) lowest = start2;
+                    else lowest = start3++;
+                } else lowest = start2;
+                if(lowest == start2) lowest = start2++;
+            } else lowest = start3++;
+
+            outArr[outIndex++] = tmpBars[lowest];
+            Thread.Sleep(5);
+            await ForceRender(true);
         }
         for(int i = start; i < end3; i++) tmpBars[i] = outArr[i];
     }
