@@ -26,7 +26,7 @@
     private static int amount = 400;
     double[] bars = new double[amount];
     double[] timedBars = new double[amount];
-    PostSortTime? connection;
+    SortTimeDatabase? connection;
     bool firstTimeInsertionSort = true;
     bool firstTimeMergeSort = true;
 
@@ -81,7 +81,7 @@
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
         if(!firstTimeMergeSort) {
-            connection = new PostSortTime();
+            connection = new SortTimeDatabase();
             connection.InsertTime("Merge Sort", elapsedNs);
         } else firstTimeMergeSort = false;
         Console.WriteLine("Merge Sort took " + elapsedNs + " nanoseconds");
@@ -219,7 +219,7 @@
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
         if(!firstTimeInsertionSort) {
-            connection = new PostSortTime();
+            connection = new SortTimeDatabase();
             connection.InsertTime("Insertion Sort", elapsedNs);
         } else firstTimeInsertionSort = false;
         Console.WriteLine("Insertion sort took " + elapsedNs + " nanoseconds");

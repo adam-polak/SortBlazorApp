@@ -1,15 +1,16 @@
+using System.ComponentModel.Design;
 using System.Data;
 using Dapper;
 using Npgsql;
 
 namespace DataAccessLibrary;
 
-public class PostSortTime
+public class SortTimeDatabase
 {
     private NpgsqlConnection connection;
     private string[] algorithms = { "Insertion Sort", "Merge Sort", "Bubble Sort" };
 
-    public PostSortTime() {
+    public SortTimeDatabase() {
         connection = new NpgsqlConnection("Host=localhost:5432;Username=postgres;Password=password;Database=sortingdb");
         connection.Open();
     }
@@ -25,5 +26,10 @@ public class PostSortTime
         cmd.Parameters.AddWithValue("a", algorithm);
         cmd.Parameters.AddWithValue("n", nanoSeconds);
         cmd.ExecuteNonQuery();
+    }
+
+    public List<SortTime> GetTimes() {
+        List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT DISTINCT algorithm, AVG(time_nanoseconds) AS avgTimeNanoseconds FROM times GROUP BY algorithm;");
+        return list;
     }
 }

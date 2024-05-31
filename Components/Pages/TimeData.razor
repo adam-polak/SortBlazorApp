@@ -1,0 +1,44 @@
+@page "/TimeData"
+@attribute [StreamRendering]
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Algorithm Averages</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (times == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Algorithm</th>
+                <th>Average Time (in nanoseconds)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (SortTime time in times)
+            {
+                <tr>
+                    <td>@time.algorithm</td>
+                    <td>@time.avgTimeNanoseconds</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<SortTime>? times;
+
+    protected override async Task OnInitializedAsync()
+    {
+        SortTimeDatabase connection = new SortTimeDatabase();
+        times = connection.GetTimes();
+        await InvokeAsync(StateHasChanged);
+    }
+}
