@@ -25,6 +25,7 @@
     int num = 0;
     private static int amount = 400;
     double[] bars = new double[amount];
+    double[] timedBars = new double[amount];
 
     protected override async Task OnInitializedAsync() {
         MakeList();
@@ -40,10 +41,10 @@
     
     private void MakeList() {
         num = 0;
-        bars = new double[amount];
         Random rnd = new Random();
         for(int i = 0; i < amount; i++) {
             bars[i] = rnd.NextDouble() * 49;
+            timedBars[i] = bars[i];
         }
     }
 
@@ -61,9 +62,31 @@
     }
 
     private async void MergeSortBars() {
+        if(IsBarsSorted()) return;
         double[] tmpBars = new double[amount];
         Array.Copy(bars, tmpBars, amount);
         await BreakUpArray(tmpBars, 0, amount / 2, amount);
+        TimedMergeSortBars();
+    }
+
+    private void TimedMergeSortBars() {
+        double[] tmpBars = new double[amount];
+        System.GC.Collect();
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        TimedBreakUpArray(tmpBars, 0, amount / 2, amount);
+        watch.Stop();
+        var elapsedNs = watch.ElapsedTicks / 100;
+        Console.WriteLine("Merge Sort took " + elapsedNs + " nanoseconds");
+    }
+
+    private async void TimedBreakUpArray(double[] tmpBars, int start, int middle, int end) {
+        if(middle < start || middle == end) return;
+        if(end - start + 1 <= 5) SortSmall(start, end);
+        int m1 = ((middle - start + 1) / 2) + start;
+        int m2 = ((end - middle + 1) / 2) + middle;
+        TimedBreakUpArray(tmpBars, start, m1, middle);
+        TimedBreakUpArray(tmpBars, middle + 1, m2, end);
+        await MergeSort(timedBars, tmpBars, start, middle, end, true);
     }
 
     private void SortSmall(int start, int end) {
@@ -78,10 +101,10 @@
         int m2 = ((end - middle + 1) / 2) + middle;
         await BreakUpArray(tmpBars, start, m1, middle);
         await BreakUpArray(tmpBars, middle + 1, m2, end);
-        await MergeSort(tmpBars, start, middle, end);
+        await MergeSort(bars, tmpBars, start, middle, end, false);
     }
 
-    private async Task MergeSort(double[] tmpBars, int start1, int start2, int end3) {
+    private async Task MergeSort(double[] outArr, double[] tmpBars, int start1, int start2, int end3, bool timed) {
         int start = start1;
         int outIndex = start1;
         int end1 = start2;
@@ -115,31 +138,58 @@
                 if(lowest == start2) lowest = start2++;
             } else lowest = start3++;
 
-            bars[outIndex++] = tmpBars[lowest];
-            Thread.Sleep(5);
-            await ForceRender(true);
+            outArr[outIndex++] = tmpBars[lowest];
+            if(!timed) {
+                Thread.Sleep(5);
+                await ForceRender(true);
+            }
         }
-        for(int i = start; i < end3; i++) tmpBars[i] = bars[i];
+        for(int i = start; i < end3; i++) tmpBars[i] = outArr[i];
+    }
+
+    private bool IsBarsSorted() {
+        for(int i = 0; i < amount - 1; i++) {
+            if(timedBars[i + 1] < timedBars[i]) return false;
+        }
+        return true;
     }
 
     private async void InsertionSortBars() {
-        if(num == amount) return;
+        if(num == amount) {
+            TimedInsertionSortBars();
+            return;
+        }
         bool render = InsertionSort(0, num++);
         await ForceRender(render);
         Thread.Sleep(20);
         InsertionSortBars();
     }
 
+    private void TimedInsertionSortBars() {
+        if(IsBarsSorted()) return;
+        int index = 0;
+        System.GC.Collect();
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        while(index < amount) InsertionSort(timedBars, 0, index++);
+        watch.Stop();
+        var elapsedNs = watch.ElapsedTicks / 100;
+        Console.WriteLine("Insertion sort took " + elapsedNs + " nanoseconds");
+    }
+
     private bool InsertionSort(int b, int index) {
+        return InsertionSort(bars, b, index);
+    }
+
+    private bool InsertionSort(double[] arr, int b, int index) {
         while(b < index) {
-            if(bars[index] < bars[b]) {
+            if(arr[index] < arr[b]) {
                 int s = index;
-                double temp = bars[index];
+                double temp = arr[index];
                 while(s > b) {
-                    bars[s] = bars[s - 1];
+                    arr[s] = arr[s - 1];
                     s--;
                 }
-                bars[b] = temp;
+                arr[b] = temp;
                 return true;
             }
             b++;
