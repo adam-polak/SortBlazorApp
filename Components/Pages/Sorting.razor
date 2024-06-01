@@ -207,7 +207,7 @@
             } else lowest = start3++;
 
             outArr[outIndex++] = tmpBars[lowest];
-            Thread.Sleep(5);
+            Thread.Sleep(3);
             await ForceRender(true);
         }
         for(int i = start; i < end3; i++) tmpBars[i] = outArr[i];
