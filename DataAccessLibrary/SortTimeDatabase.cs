@@ -20,9 +20,13 @@ public class SortTimeDatabase
 
     public void InsertTime(string algorithm, long nanoSeconds) {
         if(!ContainsAlgorithm(algorithm)) return;
-        var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, time_nanoseconds) VALUES (@a, @n);", connection);
+        var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, time_nanoseconds, id) VALUES (@a, @n, @i);", connection);
+        List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT MAX(id) AS id FROM times;");
+        SortTime x = list.Last();
+        int id = x == null ? 1 : x.id + 1;
         cmd.Parameters.AddWithValue("a", algorithm);
         cmd.Parameters.AddWithValue("n", nanoSeconds);
+        cmd.Parameters.AddWithValue("i", id);
         cmd.ExecuteNonQuery();
     }
 
