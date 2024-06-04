@@ -18,10 +18,12 @@
     <button @onclick="MergeSortBars">Merge Sort</button>
     <button @onclick="BubbleSortBars">Bubble Sort</button>
     <button @onclick="SetUpTables">Set Up Tables</button>
+    <h1>@test</h1>
 </div>
 
 @code {
 
+    string test = "AZURE_POSTGRESQL_CONNECTIONSTRING";
     int num = 0;
     private static int amount = 400;
     double[] bars = new double[amount];
