@@ -37,6 +37,7 @@
 
     private void SetUpTables() {
         connection = new SortTimeDatabase();
+        connection.SetTables();
     }
 
     private async Task ForceRender(bool value) {
