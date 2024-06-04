@@ -9,7 +9,7 @@ public class SortTimeDatabase
     private string[] algorithms = { "Insertion Sort", "Merge Sort", "Bubble Sort" };
 
     public SortTimeDatabase() {
-        connection = new NpgsqlConnection("Host=localhost:5432;Username=postgres;Password=password;Database=sortingdb");
+        connection = new NpgsqlConnection("AZURE_POSTGRESQL_CONNECTIONSTRING");
         connection.Open();
     }
 
