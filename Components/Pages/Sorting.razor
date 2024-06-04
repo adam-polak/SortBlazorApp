@@ -17,6 +17,7 @@
     <button @onclick="InsertionSortBars">Insertion Sort</button>
     <button @onclick="MergeSortBars">Merge Sort</button>
     <button @onclick="BubbleSortBars">Bubble Sort</button>
+    <button @onclick="SetUpTables">Set Up Tables</button>
 </div>
 
 @code {
@@ -32,6 +33,10 @@
     protected override async Task OnInitializedAsync() {
         MakeList();
         await ForceRender(true);
+    }
+
+    private void SetUpTables() {
+        connection = new SortTimeDatabase();
     }
 
     private async Task ForceRender(bool value) {

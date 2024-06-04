@@ -18,6 +18,11 @@ public class SortTimeDatabase
         return false;
     }
 
+    public void SetTables() {
+        var cmd = new NpgsqlCommand("CREATE TABLE IF NOT EXISTS times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY)");
+        cmd.ExecuteNonQuery();
+    }
+
     public void InsertTime(string algorithm, long nanoSeconds) {
         if(!ContainsAlgorithm(algorithm)) return;
         var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, time_nanoseconds, id) VALUES (@a, @n, @i);", connection);
