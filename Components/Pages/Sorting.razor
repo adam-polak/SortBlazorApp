@@ -1,5 +1,6 @@
 @page "/Sorting"
 @rendermode InteractiveServer
+@inject IConfiguration Config
 
 <PageTitle>Sorting</PageTitle>
 <div class="btnContainer">
@@ -18,12 +19,9 @@
     <button @onclick="MergeSortBars">Merge Sort</button>
     <button @onclick="BubbleSortBars">Bubble Sort</button>
     <button @onclick="SetUpTables">Set Up Tables</button>
-    <h1>@test</h1>
 </div>
 
 @code {
-
-    string test = "AZURE_POSTGRESQL_CONNECTIONSTRING";
     int num = 0;
     private static int amount = 400;
     double[] bars = new double[amount];
@@ -38,7 +36,7 @@
     }
 
     private void SetUpTables() {
-        connection = new SortTimeDatabase();
+        connection = new SortTimeDatabase(Config);
         connection.SetTables();
     }
 
@@ -86,7 +84,7 @@
         }
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
-        connection = new SortTimeDatabase();
+        connection = new SortTimeDatabase(Config);
         connection.InsertTime("Bubble Sort", elapsedNs);
         Console.WriteLine("Bubble Sort took " + elapsedNs + " nanoseconds");
     }
@@ -110,7 +108,7 @@
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
         if(!firstTimeMergeSort) {
-            connection = new SortTimeDatabase();
+            connection = new SortTimeDatabase(Config);
             connection.InsertTime("Merge Sort", elapsedNs);
         } else firstTimeMergeSort = false;
         Console.WriteLine("Merge Sort took " + elapsedNs + " nanoseconds");
@@ -248,7 +246,7 @@
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
         if(!firstTimeInsertionSort) {
-            connection = new SortTimeDatabase();
+            connection = new SortTimeDatabase(Config);
             connection.InsertTime("Insertion Sort", elapsedNs);
         } else firstTimeInsertionSort = false;
         Console.WriteLine("Insertion sort took " + elapsedNs + " nanoseconds");

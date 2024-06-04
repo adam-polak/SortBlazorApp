@@ -5,12 +5,17 @@ namespace DataAccessLibrary;
 
 public class SortTimeDatabase
 {
-    private NpgsqlConnection connection;
+    private static IConfiguration? _config;
+    private NpgsqlConnection? connection;
     private string[] algorithms = { "Insertion Sort", "Merge Sort", "Bubble Sort" };
 
-    public SortTimeDatabase() {
-        connection = new NpgsqlConnection("AZURE_POSTGRESQL_CONNECTIONSTRING");
-        connection.Open();
+    public SortTimeDatabase(IConfiguration config) {
+        _config = config;
+        if(_config == null) connection = null;
+        else {
+            connection = new NpgsqlConnection(_config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING"));
+            connection.Open();
+        }
     }
 
     private bool ContainsAlgorithm(string algorithm) {
@@ -24,7 +29,7 @@ public class SortTimeDatabase
     }
 
     public void InsertTime(string algorithm, long nanoSeconds) {
-        if(!ContainsAlgorithm(algorithm)) return;
+        if(connection == null || !ContainsAlgorithm(algorithm)) return;
         var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, time_nanoseconds, id) VALUES (@a, @n, @i);", connection);
         List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT MAX(id) AS id FROM times;");
         SortTime x = list.Last();
@@ -35,7 +40,8 @@ public class SortTimeDatabase
         cmd.ExecuteNonQuery();
     }
 
-    public List<SortTime> GetTimes() {
+    public List<SortTime>? GetTimes() {
+        if(connection == null) return null;
         List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT DISTINCT algorithm, AVG(time_nanoseconds) AS avgTimeNanoseconds FROM times GROUP BY algorithm ORDER BY avgTimeNanoSeconds ASC;");
         return list;
     }

@@ -1,5 +1,6 @@
 @page "/TimeData"
 @attribute [StreamRendering]
+@inject IConfiguration Config
 
 <PageTitle>Algorithm Averages</PageTitle>
 
@@ -37,7 +38,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        SortTimeDatabase connection = new SortTimeDatabase();
+        SortTimeDatabase connection = new SortTimeDatabase(Config);
         times = connection.GetTimes();
         await InvokeAsync(StateHasChanged);
     }
