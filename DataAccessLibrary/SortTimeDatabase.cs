@@ -13,7 +13,7 @@ public class SortTimeDatabase
         _config = config;
         if(_config == null) connection = null;
         else {
-            connection = new NpgsqlConnection(_config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING"));
+            connection = new NpgsqlConnection(_config.GetConnectionString("Default"));
             connection.Open();
         }
     }
