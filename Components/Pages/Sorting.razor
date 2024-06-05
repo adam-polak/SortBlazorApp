@@ -21,8 +21,10 @@
     <button @onclick="SetUpTables">Set Up Tables</button>
 </div>
 <h1>@connString</h1>
+<h1>@status</h1>
 
 @code {
+    string status = "Test";
     string? connString = "";
     int num = 0;
     private static int amount = 400;
@@ -40,7 +42,7 @@
 
     private void SetUpTables() {
         connection = new SortTimeDatabase(Config);
-        connection.SetTables();
+        status = connection.SetTables();
     }
 
     private async Task ForceRender(bool value) {
