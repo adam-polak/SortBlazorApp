@@ -23,11 +23,6 @@ public class SortTimeDatabase
         return false;
     }
 
-    public void SetTables() {
-        var cmd = new SqlCommand("CREATE TABLE times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY);", connection);
-        cmd.ExecuteNonQuery();
-    }
-
     public void InsertTime(string algorithm, long nanoSeconds) {
         if(connection == null || !ContainsAlgorithm(algorithm)) return;
         var cmd = new SqlCommand("INSERT INTO times (algorithm, time_nanoseconds, id) VALUES (@a, @n, @i);", connection);
