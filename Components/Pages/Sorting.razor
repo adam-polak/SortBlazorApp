@@ -20,8 +20,10 @@
     <button @onclick="BubbleSortBars">Bubble Sort</button>
     <button @onclick="SetUpTables">Set Up Tables</button>
 </div>
+<h1>@connString</h1>
 
 @code {
+    string? connString = "";
     int num = 0;
     private static int amount = 400;
     double[] bars = new double[amount];
@@ -32,11 +34,11 @@
 
     protected override async Task OnInitializedAsync() {
         MakeList();
+        connString = Config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING");
         await ForceRender(true);
     }
 
     private void SetUpTables() {
-        Console.WriteLine(Config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING"));
         connection = new SortTimeDatabase(Config);
         connection.SetTables();
     }
