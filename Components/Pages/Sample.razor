@@ -1,0 +1,16 @@
+@page "/sample"
+@inject IConfiguration Config
+
+<PageTitle>Sample</PageTitle>
+
+<h1>Sample</h1>
+
+<h1>@test</h1>
+
+@code {
+    string? test = "";
+
+    protected override async Task OnInitializedAsync() {
+        test = Config.GetConnectionString("Default");
+    }
+}
