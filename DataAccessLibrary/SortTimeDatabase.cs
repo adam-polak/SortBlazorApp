@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Dapper;
 using Microsoft.Data.SqlClient;
 
@@ -37,7 +38,24 @@ public class SortTimeDatabase
 
     public List<SortTime>? GetTimes() {
         if(connection == null) return null;
-        List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT DISTINCT algorithm, AVG(time_nanoseconds) AS avgTimeNanoseconds FROM times GROUP BY algorithm ORDER BY avgTimeNanoSeconds ASC;");
-        return list;
+        List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT algorithm, time_nanoseconds FROM times;");
+        HashSet<string> algs = new HashSet<string>();
+        List<SortTime> ans = new List<SortTime>();
+        foreach(SortTime x in list) {
+            if(x.algorithm != null) {
+                if(algs.Contains(x.algorithm)) {
+                    foreach(SortTime y in ans) {
+                        if(y.algorithm != null && y.algorithm.Equals(x.algorithm)) {
+                            y.time_nanoseconds = (y.time_nanoseconds + x.time_nanoseconds) / 2;
+                            break;
+                        }
+                    }
+                } else {
+                    algs.Add(x.algorithm);
+                    ans.Add(x);
+                }
+            }
+        }
+        return ans;
     }
 }
