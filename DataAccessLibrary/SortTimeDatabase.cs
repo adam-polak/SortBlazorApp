@@ -23,14 +23,9 @@ public class SortTimeDatabase
         return false;
     }
 
-    public string SetTables() {
-        try {
-            var cmd = new NpgsqlCommand("CREATE TABLE times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY);", connection);
-            cmd.ExecuteNonQuery();
-            return "Done";
-        } catch(Exception e) {
-            return e.ToString();
-        }
+    public void SetTables() {
+        var cmd = new NpgsqlCommand("CREATE TABLE times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY);", connection);
+        cmd.ExecuteNonQuery();
     }
 
     public void InsertTime(string algorithm, long nanoSeconds) {

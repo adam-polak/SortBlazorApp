@@ -3,6 +3,7 @@
 @inject IConfiguration Config
 
 <PageTitle>Sorting</PageTitle>
+
 <div class="btnContainer">
     <button id="randomize" @onclick="MakeList">Randomize</button>
 </div>
@@ -21,10 +22,10 @@
     <button @onclick="SetUpTables">Set Up Tables</button>
 </div>
 <h1>@connString</h1>
-<h1>@status</h1>
+<h1>@testAppSettings</h1>
 
 @code {
-    string status = "Test";
+    string? testAppSettings = "";
     string? connString = "";
     int num = 0;
     private static int amount = 400;
@@ -36,13 +37,14 @@
 
     protected override async Task OnInitializedAsync() {
         MakeList();
+        testAppSettings = Config.GetConnectionString("Default");
         connString = Config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING");
         await ForceRender(true);
     }
 
     private void SetUpTables() {
         connection = new SortTimeDatabase(Config);
-        status = connection.SetTables();
+        connection.SetTables();
     }
 
     private async Task ForceRender(bool value) {
