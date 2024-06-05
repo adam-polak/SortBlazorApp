@@ -1,19 +1,19 @@
 using Dapper;
-using Npgsql;
+using Microsoft.Data.SqlClient;
 
 namespace DataAccessLibrary;
 
 public class SortTimeDatabase
 {
     private static IConfiguration? _config;
-    private NpgsqlConnection? connection;
+    private SqlConnection? connection;
     private string[] algorithms = { "Insertion Sort", "Merge Sort", "Bubble Sort" };
 
     public SortTimeDatabase(IConfiguration config) {
         _config = config;
         if(_config == null) connection = null;
         else {
-            connection = new NpgsqlConnection(_config.GetConnectionString("Default"));
+            connection = new SqlConnection(_config.GetConnectionString("Default"));
             connection.Open();
         }
     }
@@ -24,13 +24,13 @@ public class SortTimeDatabase
     }
 
     public void SetTables() {
-        var cmd = new NpgsqlCommand("CREATE TABLE times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY);", connection);
+        var cmd = new SqlCommand("CREATE TABLE times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY);", connection);
         cmd.ExecuteNonQuery();
     }
 
     public void InsertTime(string algorithm, long nanoSeconds) {
         if(connection == null || !ContainsAlgorithm(algorithm)) return;
-        var cmd = new NpgsqlCommand("INSERT INTO times (algorithm, time_nanoseconds, id) VALUES (@a, @n, @i);", connection);
+        var cmd = new SqlCommand("INSERT INTO times (algorithm, time_nanoseconds, id) VALUES (@a, @n, @i);", connection);
         List<SortTime> list = (List<SortTime>)connection.Query<SortTime>("SELECT MAX(id) AS id FROM times;");
         SortTime x = list.Last();
         int id = x == null ? 1 : x.id + 1;
