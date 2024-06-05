@@ -4,7 +4,7 @@
     border-radius: 10px;
     font-size: xx-large;
     font-weight: bold;
-    width: 80%;
+    width: 90%;
 }
 
 button {
@@ -38,11 +38,12 @@ button:active {
     flex-direction: row;
     justify-content: space-evenly;
     height: 50vh;
-    width: 70vw;
+    width: 90%;
     background-color: lightpink;
 }
 
 .btnContainer {
+    width: 90%;
     margin: 2vh auto;
     display: flex;
     flex-direction: row;
