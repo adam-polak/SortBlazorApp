@@ -15,6 +15,7 @@ public class SortTimeDatabase
         else {
             connection = new NpgsqlConnection(_config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING"));
             connection.Open();
+            Console.WriteLine(connection.ConnectionString);
         }
     }
 
@@ -24,7 +25,7 @@ public class SortTimeDatabase
     }
 
     public void SetTables() {
-        var cmd = new NpgsqlCommand("CREATE TABLE IF NOT EXISTS times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY)");
+        var cmd = new NpgsqlCommand("CREATE TABLE times (algorithm TEXT, time_nanoseconds INTEGER, id INTEGER PRIMARY KEY)");
         cmd.ExecuteNonQuery();
     }
 

@@ -36,6 +36,7 @@
     }
 
     private void SetUpTables() {
+        Console.WriteLine(Config.GetConnectionString("AZURE_POSTGRESQL_CONNECTIONSTRING"));
         connection = new SortTimeDatabase(Config);
         connection.SetTables();
     }
