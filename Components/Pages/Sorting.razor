@@ -27,8 +27,6 @@
     double[] bars = new double[amount];
     double[] timedBars = new double[amount];
     SortTimeDatabase? connection;
-    bool firstTimeInsertionSort = true;
-    bool firstTimeMergeSort = true;
 
     protected override async Task OnInitializedAsync() {
         MakeList();
@@ -102,10 +100,10 @@
         TimedBreakUpArray(tmpBars, 0, amount / 2, amount);
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
-        if(!firstTimeMergeSort) {
+        if(elapsedNs < 1000) {
             connection = new SortTimeDatabase(Config);
             connection.InsertTime("Merge Sort", elapsedNs);
-        } else firstTimeMergeSort = false;
+        }
         Console.WriteLine("Merge Sort took " + elapsedNs + " nanoseconds");
     }
 
@@ -240,10 +238,10 @@
         while(index < amount) InsertionSort(timedBars, 0, index++);
         watch.Stop();
         long elapsedNs = watch.ElapsedTicks / 100;
-        if(!firstTimeInsertionSort) {
+        if(elapsedNs < 1000) {
             connection = new SortTimeDatabase(Config);
             connection.InsertTime("Insertion Sort", elapsedNs);
-        } else firstTimeInsertionSort = false;
+        }
         Console.WriteLine("Insertion sort took " + elapsedNs + " nanoseconds");
     }
 
